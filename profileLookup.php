@@ -133,6 +133,7 @@ function profileLookup() {
 			print "<td>" . $reportRecords[$reportKey] . "</td>\n";
 		}
 		print "</tr>\n";
+		$reportRecords = array();
 	}
 	print "</table>\n";
 
