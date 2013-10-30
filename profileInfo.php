@@ -25,11 +25,12 @@ if (array_key_exists('appName', $_GET)) {
   	print "$queryString<br />";
   }
 
-  $sqlResult = mysql_query($queryString);
+  $sqlResult = $DbLink->query($queryString);
   if (!$sqlResult) {
+  	$DbError = $DbLink->error;
   	abortAndExit();
   }
-  $record_id = mysql_insert_id();
+  $record_id = $DbLink->insert_id;
 
   global $appcastKeys;
 
@@ -39,7 +40,7 @@ if (array_key_exists('appName', $_GET)) {
   // Date, 
   	if (array_key_exists($key, $appcastKeys) && $appcastKeys[$key] == 1) {
 	
-  		$value = mysql_real_escape_string($value);
+  		$value = $DbLink->real_escape_string($value);
 	
   		$queryString = "INSERT INTO reportRecord (REPORT_KEY, REPORT_VALUE, REPORT_ID) VALUES (\"" . $key . "\",\"" . $value . "\",\"" . $record_id . "\")";
   		if ($debug) {
@@ -47,8 +48,9 @@ if (array_key_exists('appName', $_GET)) {
   			print "$queryString<br />";
   		}
 	
-  		$sqlResult = mysql_query($queryString);
+  		$sqlResult = $DbLink->query($queryString);
   		if (!$sqlResult) {
+  		  	$DbError = $DbLink->error;
   			abortAndExit();
   		}
   	}

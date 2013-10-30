@@ -17,22 +17,15 @@ function TryOpenDb()
 	global $db_name;
 
 	/* Connecting, selecting database */
-	$DbLink = mysql_connect($db_host, $db_user, $db_password);
+	$DbLink = new mysqli($db_host, $db_user, $db_password, $db_name);
 
-	if (!$DbLink)
+	if (mysqli_connect_error())
 	{
-		$DbError = mysql_error();
+		$DbError = mysqli_connect_error();
 		return FALSE;
 	}
 
-	if (!mysql_select_db($db_name))
-	{
-		$DbError = mysql_error();
-		CloseDb();
-		return FALSE;
-	}
-
-	mysql_query("BEGIN");
+	$DbLink->autocommit(FALSE);
 	return $DbLink;
 }
 
@@ -42,8 +35,8 @@ function CloseDb()
 
 	if ($DbLink)
 	{
-		mysql_query("COMMIT");
-		mysql_close($DbLink);
+		$DbLink->commit();
+		$DbLink->close();
 		$DbLink = FALSE;
 	}
 }
@@ -51,10 +44,11 @@ function CloseDb()
 function abortAndExit()
 {
 	global $DbLink;
-	print "Aborting database communication: " . mysql_error();
+	global $DbError;
+	print "Aborting database communication: " . $DbError;
 	if ($DBLink) {
-		mysql_query("ROLLBACK");
-		mysql_close($DbLink);
+		$DbLink->rollback();
+		$DbLink->close();
 		$DbLink = FALSE;
 	}
 	exit();

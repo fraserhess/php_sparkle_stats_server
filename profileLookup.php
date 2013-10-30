@@ -48,7 +48,7 @@ function profileLookupForm() {
 }
 
 function profileLookup() {
-	global $start_date, $end_date;
+	global $DbLink, $DbError, $start_date, $end_date;
 	// connect to the database
 	if (!TryOpenDB()) {
 		abortAndExit();
@@ -66,20 +66,21 @@ function profileLookup() {
 	$queryString = "select REPORT_ID,REPORT_DATE from profileReport where REPORT_DATE >= '" . $start_date . "' and REPORT_DATE <= '" . $end_date . " ORDER BY REPORT_DATE'";
 	//print "query: $queryString<br />\n";
 	// report_ids will be an associative array: keys=report_ids, values=dates
-	$report_ids_lookup = mysql_query($queryString);
+	$report_ids_lookup = $DbLink->query($queryString);
 	if (!$report_ids_lookup) {
+		$DbError = $DbLink->error;
 		abortAndExit();
 		//print "Could not look up row IDs with query $queryString<br />\n";
 	}
-	if (mysql_num_rows($report_ids_lookup) == 0) {
+	if ($report_ids_lookup->num_rows == 0) {
 		print "<p>No reports found in this date range</p>\n";
 		return;
 	}
-	while ($row = mysql_fetch_assoc($report_ids_lookup)) {
+	while ($row = $report_ids_lookup->fetch_assoc()) {
 		//print $row['REPORT_ID'] . ": " . $row['REPORT_DATE'];
 		$report_ids[$row['REPORT_ID']] = $row['REPORT_DATE'];
 	}
-	mysql_free_result($report_ids_lookup);
+	$report_ids_lookup->free();
 
 	if ($debug) {
 		print "Report IDs:<br />\n";
@@ -90,14 +91,15 @@ function profileLookup() {
 	// Now dsplay a table of reported data for these REPORT_IDs.
 	// Could find keys in advance using "select REPORT_KEY from reportRecord group by REPORT_KEY"
 	// knownReportKeys is a (non-associative) array where each entry is a key used in a profile report.
-	$knownReportKeysLookup = mysql_query("select REPORT_KEY from reportRecord group by REPORT_KEY");
+	$knownReportKeysLookup = $DbLink->query("select REPORT_KEY from reportRecord group by REPORT_KEY");
 	if (!$knownReportKeysLookup) {
+		$DbError = $DbLink->error;
 		abortAndExit();
 	}
-	while ($row = mysql_fetch_array($knownReportKeysLookup)) {
+	while ($row = $knownReportKeysLookup->fetch_array()) {
 		$knownReportKeys[] = $row[0];
 	}
-	mysql_free_result($knownReportKeysLookup);
+	$knownReportKeysLookup->free();
 
 	if ($debug) {
 		print "known keys:<br />\n";
@@ -112,14 +114,15 @@ function profileLookup() {
 	while(list($report_id, $report_date) = each($report_ids)) {
 		$queryString = "select REPORT_KEY,REPORT_VALUE from reportRecord where REPORT_ID='" . $report_id . "'";
 		// report_records will be an assoc array, keys from knownReportKeys, values with the corresponding value
-		$reportRecordsLookup = mysql_query($queryString);
+		$reportRecordsLookup = $DbLink->query($queryString);
 		if (!$reportRecordsLookup) {
+			$DbError = $DbLink->error;
 			abortAndExit();
 		}
-		while ($row = mysql_fetch_assoc($reportRecordsLookup)) {
+		while ($row = $reportRecordsLookup->fetch_assoc()) {
 			$reportRecords[$row['REPORT_KEY']] = $row['REPORT_VALUE'];
 		}
-		mysql_free_result($reportRecordsLookup);
+		$reportRecordsLookup->free();
 		if ($debug) {
 			print "<br />report records: <br />\n";
 			print_r($reportRecords);
