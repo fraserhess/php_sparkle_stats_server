@@ -20,12 +20,15 @@ if (array_key_exists('appName', $_GET)) {
   }
   // Record the report
   $report_date = strftime("%Y-%m-%d %H:%M:%S");
-  $queryString = "INSERT INTO profileReport (IP_ADDR, REPORT_DATE) VALUES (\"". $_SERVER["REMOTE_ADDR"] . "\",\"" . $report_date .  "\")";
+  $remote_addr = $_SERVER['REMOTE_ADDR'];
+  $queryString = "INSERT INTO profileReport (IP_ADDR, REPORT_DATE) VALUES (?,?)";
   if ($debug) {
-  	print "$queryString<br />";
+  	print "$remote_addr<br />";
+  	print "$report_date<br />";
   }
-
-  $sqlResult = $DbLink->query($queryString);
+  $stmt = $DbLink->prepare($queryString);
+  $stmt->bind_param("ss", $remote_addr, $report_date);
+  $sqlResult = $stmt->execute();
   if (!$sqlResult) {
   	$DbError = $DbLink->error;
   	abortAndExit();
@@ -35,20 +38,17 @@ if (array_key_exists('appName', $_GET)) {
   global $appcastKeys;
 
   // parse the data report
+  $queryString = "INSERT INTO reportRecord (REPORT_KEY, REPORT_VALUE, REPORT_ID) VALUES (?,?,?)";
+  $stmt = $DbLink->prepare($queryString);
   while (list($key, $value) = each($_GET)) {
 
   // Date, 
   	if (array_key_exists($key, $appcastKeys) && $appcastKeys[$key] == 1) {
-	
-  		$value = $DbLink->real_escape_string($value);
-	
-  		$queryString = "INSERT INTO reportRecord (REPORT_KEY, REPORT_VALUE, REPORT_ID) VALUES (\"" . $key . "\",\"" . $value . "\",\"" . $record_id . "\")";
   		if ($debug) {
   			print "$key: $value<br />\n";
-  			print "$queryString<br />";
   		}
-	
-  		$sqlResult = $DbLink->query($queryString);
+  		$stmt->bind_param("ssi", $key, $value, $record_id);
+  		$sqlResult = $stmt->execute();
   		if (!$sqlResult) {
   		  	$DbError = $DbLink->error;
   			abortAndExit();
