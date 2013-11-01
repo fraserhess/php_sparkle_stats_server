@@ -1,8 +1,5 @@
 <?php
-// $Id: profileDB.php 2 2006-06-08 19:33:50Z tph $
-// $HeadURL: http://sparkleplus.googlecode.com/svn/trunk/profileDB.php $
 // TryOpenDb and CloseDb - Open and close the database.
-// Change the username, password, and database to the correct values for your database
 	$DbLink = FALSE;
 	$DbError = "";
 

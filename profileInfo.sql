@@ -1,6 +1,3 @@
--- $Id: profileInfo.sql 3 2006-06-09 22:30:25Z atomicbird $
--- $HeadURL: http://sparkleplus.googlecode.com/svn/trunk/profileInfo.sql $
-
 -- The schema may look a little boneheaded in that it will accept any sort of key/value pair and uses
 -- two tables where one would be sufficient.  It was done this way so that it'll be flexible enough to
 -- handle a varying set of keys.  If/when new keys are added to Sparkle, it'd be nice if developers using

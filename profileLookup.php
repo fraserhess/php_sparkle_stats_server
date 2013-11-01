@@ -5,8 +5,6 @@
 <body>
 <?php
 
-// $Id: profileLookup.php 6 2006-06-09 23:50:23Z atomicbird $
-// $HeadURL: http://sparkleplus.googlecode.com/svn/trunk/profileLookup.php $
 require("profileConfig.php");
 require("profileDB.php");
 $debug = 0;
