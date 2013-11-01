@@ -89,7 +89,7 @@ function profileLookup() {
 	// Now dsplay a table of reported data for these REPORT_IDs.
 	// Could find keys in advance using "select REPORT_KEY from reportRecord group by REPORT_KEY"
 	// knownReportKeys is a (non-associative) array where each entry is a key used in a profile report.
-	$knownReportKeysLookup = $DbLink->query("select REPORT_KEY from reportRecord group by REPORT_KEY");
+	$knownReportKeysLookup = $DbLink->query("select distinct REPORT_KEY from reportRecord order by REPORT_KEY;");
 	if (!$knownReportKeysLookup) {
 		$DbError = $DbLink->error;
 		abortAndExit();
