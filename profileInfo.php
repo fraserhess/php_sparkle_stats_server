@@ -29,6 +29,7 @@ if (array_key_exists('appName', $_GET)) {
 	$stmt = $DbLink->prepare($queryString);
 	$stmt->bind_param("ss", $remote_addr, $report_date);
 	$sqlResult = $stmt->execute();
+	$stmt->close();
 	if (!$sqlResult) {
 		$DbError = $DbLink->error;
 		abortAndExit();
@@ -55,6 +56,7 @@ if (array_key_exists('appName', $_GET)) {
 			}
 		}
 	}
+	$stmt->close();
 
 	CloseDB();
 	if ($debug) {
