@@ -110,7 +110,7 @@ function profileLookup() {
 	foreach($knownReportKeys as $reportKey) {
 		print "<td>$reportKey</td>\n";
 	}
-	print "</td>\n";
+	print "</tr>\n";
 	$queryString = "select REPORT_KEY,REPORT_VALUE from reportRecord where REPORT_ID=?";
 	$stmt = $DbLink->prepare($queryString);
 	while(list($report_id, $report_date) = each($report_ids)) {
