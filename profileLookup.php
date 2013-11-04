@@ -61,10 +61,13 @@ function profileLookup() {
 	print "<tr><td>End date:</td><td>$end_date</td>\n";
 	print "</table>\n";
 
-	$queryString = "select REPORT_ID,REPORT_DATE from profileReport where REPORT_DATE >= '" . $start_date . "' and REPORT_DATE <= '" . $end_date . " ORDER BY REPORT_DATE'";
-	//print "query: $queryString<br />\n";
+	$queryString = "select REPORT_ID,REPORT_DATE from profileReport where REPORT_DATE >= ? and REPORT_DATE <= ? ORDER BY REPORT_DATE";
+	$stmt = $DbLink->prepare($queryString);
+	$stmt->bind_param("ss", $start_date, $end_date);
 	// report_ids will be an associative array: keys=report_ids, values=dates
-	$report_ids_lookup = $DbLink->query($queryString);
+	$stmt->execute();
+	$report_ids_lookup = $stmt->get_result();
+	$stmt->close;
 	if (!$report_ids_lookup) {
 		$DbError = $DbLink->error;
 		abortAndExit();
@@ -108,11 +111,13 @@ function profileLookup() {
 		print "<td>$reportKey</td>\n";
 	}
 	print "</td>\n";
-
+	$queryString = "select REPORT_KEY,REPORT_VALUE from reportRecord where REPORT_ID=?";
+	$stmt = $DbLink->prepare($queryString);
 	while(list($report_id, $report_date) = each($report_ids)) {
-		$queryString = "select REPORT_KEY,REPORT_VALUE from reportRecord where REPORT_ID='" . $report_id . "'";
+		$stmt->bind_param("i",$report_id);
+		$stmt->execute();
 		// report_records will be an assoc array, keys from knownReportKeys, values with the corresponding value
-		$reportRecordsLookup = $DbLink->query($queryString);
+		$reportRecordsLookup = $stmt->get_result();
 		if (!$reportRecordsLookup) {
 			$DbError = $DbLink->error;
 			abortAndExit();
@@ -133,6 +138,7 @@ function profileLookup() {
 		print "</tr>\n";
 		$reportRecords = array();
 	}
+	$stmt->close;
 	print "</table>\n";
 
 	CloseDB();
