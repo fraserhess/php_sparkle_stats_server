@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Sparkle Profile Data Lookup</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 <?php
@@ -56,7 +57,7 @@ function profileLookup() {
 	//$start_date = '2006-01-01';
 	//$end_date = strftime("%Y-%m-%d %H:%m:%S");
 
-	print "<table>\n";
+	print "<table id=\"date-table\">\n";
 	print "<tr><td>Start date:</td><td>$start_date</td>\n";
 	print "<tr><td>End date:</td><td>$end_date</td>\n";
 	print "</table>\n";
@@ -106,9 +107,9 @@ function profileLookup() {
 		print "known keys:<br />\n";
 		print_r($knownReportKeys);
 	}
-	print "<table><tr><td>Date</td>\n";
+	print "<table id=\"detail-table\"><tr><th>Date</th>\n";
 	foreach($knownReportKeys as $reportKey) {
-		print "<td>$reportKey</td>\n";
+		print "<th>$reportKey</th>\n";
 	}
 	print "</tr>\n";
 	$queryString = "select REPORT_KEY,REPORT_VALUE from reportRecord where REPORT_ID=?";
