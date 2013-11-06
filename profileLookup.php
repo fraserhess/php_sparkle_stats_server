@@ -23,7 +23,7 @@ if (isset($_GET['end']) && (dateValidate($_GET['end']))) {
 	$end_date = strftime("%Y-%m-%d %H:%M:%S");
 }
 // check that start looks like a date
-if (dateValidate($_GET['start'])) {
+if (isset($_GET['start']) AND dateValidate($_GET['start'])) {
 	$start_date = $_GET['start'];
 } else {
 	// default start date is one month before end date
