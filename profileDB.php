@@ -1,4 +1,11 @@
 <?php
+// Database connectivity
+// Change the username, password, and database to the correct values for your database
+$db_host	= "DATABASE HOST";
+$db_user	= "DATABASE USER NAME";
+$db_password	= "DATABASE PASSWORD";
+$db_name	= "DATABASE_NAME";
+
 // TryOpenDb and CloseDb - Open and close the database.
 	$DbLink = FALSE;
 	$DbError = "";

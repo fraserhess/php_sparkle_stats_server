@@ -22,7 +22,7 @@ First, create a database that will contain the profile reports.  How to do this 
 
 Your web host may make some alternative method available to you.
 
-Now edit profileConfig.php.  At the top of the file are several PHP variables that must be configured.
+Now edit profileDB.php.  At the top of the file are several PHP variables that must be configured. (It is assumed that you are using the same database for each of your applications.)
 
 These variables tell the PHP script how to access your database:
 
@@ -31,11 +31,11 @@ These variables tell the PHP script how to access your database:
 	$db_password    = "DATABASE PASSWORD";
 	$db_name        = "DATABASE NAME";
 
-One more variable tells the PHP script the location of your appcast file:
+For each application, create a duplicate of profileInfo-appname.php. In that file set one more variable that tells the PHP script the location of your appcast file:
 
-    $appcastURL = "http://you.org/svn/Sparkle/trunk/sparkletestcast.xml";
+    $appcastURL = "http://you.org/_sparkle/ayefoto-appcast.xml";
 
-Then upload profileInfo.php and profileConfig.php to your web host.  The URL to profileInfo.php should match the URL you entered in your app's Info.plist for the SUFeedURL key.
+Then upload profileInfo-*appname*.php, profileInfo-common.php and profileDB.php to your web host.  The URL to profileInfo-*appname*.php should match the URL you entered in your app's Info.plist for the SUFeedURL key.
 
 That's it!  Your web server is now ready to accept Sparkle requests with profile reports.
 

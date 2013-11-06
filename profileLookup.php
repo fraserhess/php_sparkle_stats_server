@@ -6,7 +6,6 @@
 <body>
 <?php
 
-require("profileConfig.php");
 require("profileDB.php");
 $debug = 0;
 
