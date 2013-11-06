@@ -133,7 +133,11 @@ function profileLookup() {
 		}
 		print "<tr><td>$report_date</td>\n";
 		foreach($knownReportKeys as $reportKey) {
-			print "<td>" . $reportRecords[$reportKey] . "</td>\n";
+			if (array_key_exists($reportKey, $reportRecords)) {
+				print "<td>" . $reportRecords[$reportKey] . "</td>\n";
+			} else {
+				print "<td></td>\n";
+			}
 		}
 		print "</tr>\n";
 		$reportRecords = array();
