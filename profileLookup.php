@@ -46,7 +46,7 @@ function profileLookupForm() {
 }
 
 function profileLookup() {
-	global $DbLink, $DbError, $start_date, $end_date;
+	global $DbLink, $DbError, $start_date, $end_date, $debug;
 	// connect to the database
 	if (!TryOpenDB()) {
 		abortAndExit();
