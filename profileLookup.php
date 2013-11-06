@@ -67,7 +67,7 @@ function profileLookup() {
 	// report_ids will be an associative array: keys=report_ids, values=dates
 	$stmt->execute();
 	$report_ids_lookup = $stmt->get_result();
-	$stmt->close;
+	$stmt->close();
 	if (!$report_ids_lookup) {
 		$DbError = $DbLink->error;
 		abortAndExit();
@@ -138,7 +138,7 @@ function profileLookup() {
 		print "</tr>\n";
 		$reportRecords = array();
 	}
-	$stmt->close;
+	$stmt->close();
 	print "</table>\n";
 
 	CloseDB();
