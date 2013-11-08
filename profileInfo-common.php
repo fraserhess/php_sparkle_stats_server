@@ -1,9 +1,16 @@
 <?php
 if (array_key_exists('appName', $_GET)) {
 	// connect to the database
-	if (!TryOpenDB()) {
-		abortAndExit();
+	if (TryOpenDB()) {
+		writeProfileToDB();
 	}
+}
+
+returnAppcast();
+exit();
+
+function writeProfileToDB() {
+	global $debug, $DbLink, $DbError, $appcastKeys;
 
 	if ($debug) {
 		print "<html><head><title>debug</title></head><body>\n";
@@ -25,8 +32,6 @@ if (array_key_exists('appName', $_GET)) {
 		abortAndExit();
 	}
 	$record_id = $DbLink->insert_id;
-
-	global $appcastKeys;
 
 	// parse the data report
 	$queryString = "INSERT INTO reportRecord (REPORT_KEY, REPORT_VALUE, REPORT_ID) VALUES (?,?,?)";
@@ -55,9 +60,11 @@ if (array_key_exists('appName', $_GET)) {
 	}
 }
 
-header("content-type: application/xhtml+xml");
+function returnAppcast() {
+	global $appcastURL;
 
-$xml = simplexml_load_file($appcastURL);
-
-echo $xml->asXML();
+	header("content-type: application/xhtml+xml");
+	$xml = simplexml_load_file($appcastURL);
+	echo $xml->asXML();
+}
 ?>
