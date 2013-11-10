@@ -57,8 +57,8 @@ function profileLookup() {
 	//$end_date = strftime("%Y-%m-%d %H:%m:%S");
 
 	print "<table id=\"date-table\">\n";
-	print "<tr><td>Start date:</td><td>$start_date</td>\n";
-	print "<tr><td>End date:</td><td>$end_date</td>\n";
+	print "<tr><th>Start date:</th><td>$start_date</td>\n";
+	print "<tr><th>End date:</th><td>$end_date</td>\n";
 	print "</table>\n";
 
 	$queryString = "select REPORT_ID,REPORT_DATE from profileReport where REPORT_DATE >= ? and REPORT_DATE <= ? ORDER BY REPORT_DATE";
