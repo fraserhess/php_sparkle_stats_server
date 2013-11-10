@@ -4,6 +4,19 @@ body
 	font-family: "Helvetica Neue", "Helvetica", Sans-Serif;
 }
 
+h2
+{
+	border-bottom: 10px solid rgb(220,238,238);
+	color: #FFFFFF;
+	background: #000000;
+	padding: 8px;
+}
+
+h3
+{
+	color: #444444;
+}
+
 #detail-table
 {
 	font-size: 12px;
@@ -54,10 +67,11 @@ body
 	font-size: 13px;
 	font-weight: normal;
 	padding: 8px;
-	background: #eeeeee;
-	border-right: 1px solid #111111;
-	border-left: 1px solid #111111;
-	color: #444444;
+	background: #000000;
+	border-left: 1px solid #000000;
+	border-top: 1px solid #cccccc;
+	color: #ffffff;
+	font-weight: bold;
 }
 
 #date-table td
@@ -65,6 +79,27 @@ body
 	padding: 8px;
 	background: #eeeeee; 
 	border-right: 1px solid #cccccc;
-	border-left: 1px solid #cccccc;
+	border-top: 1px solid #cccccc;
 	color: #444444;
+}
+
+table.chart-table
+{
+	border-collapse: collapse;
+}
+
+td.chart-table-td
+{
+	color: #444444;
+	vertical-align: bottom;
+	text-align: center;
+	background: #eeeeee;
+	font-size: smaller;
+}
+
+div.chart-table-column
+{
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
 }

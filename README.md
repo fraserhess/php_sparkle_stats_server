@@ -1,7 +1,7 @@
 ## Using Sparkle Profile Reporting on your Web Server
 (adapted from notes by Tom Harrington)
 
-This distribution includes sample PHP code which can be used on your web server to collect the data and save it to a database.  There's also a simple PHP script to display collected information in a web page.  Graph generation as on Omni's update page is as yet unimplemented. 
+This distribution includes sample PHP code which can be used on your web server to collect the data and save it to a database.  There's also PHP scripts to display collected information and charts as web pages.
 
 Why PHP?  Because I know PHP.  If you prefer some other scripting language, you'll have to write your own server code.
 
@@ -39,4 +39,4 @@ Then upload profileInfo-*appname*.php, profileInfo-common.php and profileDB.php 
 
 That's it!  Your web server is now ready to accept Sparkle requests with profile reports.
 
-If you like, you can also load the file profileLookup.php on your web server.  It's a simple script to look up profile reports from the last month and display them in an HTML table. 
+If you like, you can also load the files profileLookup.php, profileCharts.php and style.css on your web server.  The first file is a simple script to look up profile reports from the last month and display them in an HTML table. The second displays charts of the same information.
