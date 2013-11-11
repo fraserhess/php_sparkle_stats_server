@@ -42,7 +42,6 @@ CloseDB();
 echo "</body>\n";
 echo "</html>\n";
 
-
 function dateValidate($date) {
 	if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/', $date)) {
 		$timestamp = strtotime($date);
@@ -128,17 +127,18 @@ function profileCharts() {
 	foreach ($distinctApps as $app) {
 		echo "<h2>$app</h2>";
 		foreach ($charts as $chart) {
-			echo "<h3>" . $chart['heading'] . "</h3>";
-			drawChart($chart['query'],$app);
+			drawChart($chart,$app);
 		}
 	}
 }
 
 function drawChart($query,$app) {
+function drawChart($chartArray,$app) {
 	global $DbLink;
+	echo "<h3>" . $chartArray['heading'] . "</h3>";
 	$count = 0;
 	$greatest = 0;
-	$stmt = $DbLink->prepare($query);
+	$stmt = $DbLink->prepare($chartArray['query']);
 	$stmt->bind_param("s",$app);
 	$stmt->execute();
 	$results = $stmt->get_result();
