@@ -77,8 +77,18 @@ function profileCharts() {
 	$row = $report_ids->fetch_assoc();
 	$earliestReportID = $row['report_id'];
 
+	// Get latest profile report
+	$queryString ="select report_id from profileReport where report_date <= ? order by report_id desc limit 1";
+	$stmt = $DbLink->prepare($queryString);
+	$stmt->bind_param("s", $end_date);
+	$stmt->execute();
+	$report_ids = $stmt->get_result();
+	$stmt->close();
+	$row = $report_ids->fetch_assoc();
+	$latestReportID = $row['report_id'];
+
 	// Get applications
-	$queryString = "select distinct report_value from reportRecord where report_key = 'appName' and report_id >=$earliestReportID order by report_value";
+	$queryString = "select distinct report_value from reportRecord where report_key = 'appName' and report_id between $earliestReportID and $latestReportID order by report_value";
 	$distinctAppsLookup = $DbLink->query($queryString);
 	if (!$distinctAppsLookup) {
 		$DbError = $DbLink->error;
@@ -91,38 +101,38 @@ function profileCharts() {
 	
 	// App version
 	$charts['appVer']['heading'] = "App Versions";
-	$charts['appVer']['query'] = "select convert(report_value, unsigned integer) ver, count(*) c from reportRecord where report_key = 'appVersion' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by report_value order by ver";
+	$charts['appVer']['query'] = "select convert(report_value, unsigned integer) ver, count(*) c from reportRecord where report_key = 'appVersion' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by report_value order by ver";
 
 	$charts['os']['heading'] = "OS Version";
-	$charts['os']['query'] = "select report_value p, count(*) c from reportRecord where report_key = 'osVersion' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by c desc;";
+	$charts['os']['query'] = "select report_value p, count(*) c from reportRecord where report_key = 'osVersion' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by c desc;";
 	
 	$charts['majos']['heading'] = "OS Major Version";
-	$charts['majos']['query'] = "select (case when substr(report_value,1,5) = '10.9.' then 'Mavericks' when substr(report_value,1,5) = '10.8.' then 'Mountain Lion' when substr(report_value,1,5) = '10.7.' then 'Lion' when substr(report_value,1,5) = '10.6.' then 'Snow Leopard' when substr(report_value,1,5) = '10.5.' then 'Leopard' else 'Other' end) p, count(*) c from reportRecord where report_key = 'osVersion' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by c desc;";
+	$charts['majos']['query'] = "select (case when substr(report_value,1,5) = '10.9.' then 'Mavericks' when substr(report_value,1,5) = '10.8.' then 'Mountain Lion' when substr(report_value,1,5) = '10.7.' then 'Lion' when substr(report_value,1,5) = '10.6.' then 'Snow Leopard' when substr(report_value,1,5) = '10.5.' then 'Leopard' else 'Other' end) p, count(*) c from reportRecord where report_key = 'osVersion' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by c desc;";
 
 	// CPU Type
 	$charts['cpuType']['heading'] = "CPU Type";
-	$charts['cpuType']['query'] = "select (case when report_value = 7 then 'Intel' when report_value = 18 then 'PowerPC' end) cputype, count(*) c from reportRecord where report_key = 'cputype' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by report_value order by report_value desc";
+	$charts['cpuType']['query'] = "select (case when report_value = 7 then 'Intel' when report_value = 18 then 'PowerPC' end) cputype, count(*) c from reportRecord where report_key = 'cputype' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by report_value order by report_value desc";
 
 	// CPU 64 bit
 	$charts['64bit']['heading'] = "64 bit CPU";
-	$charts['64bit']['query'] = "select (case when report_value = 0 then 'No' when report_value = 1 then 'Yes' end) 'sixtyfour', count(*) c from reportRecord where report_key = 'cpu64bit' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by report_value order by report_value desc";
+	$charts['64bit']['query'] = "select (case when report_value = 0 then 'No' when report_value = 1 then 'Yes' end) 'sixtyfour', count(*) c from reportRecord where report_key = 'cpu64bit' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by report_value order by report_value desc";
 
 	// CPU speed
 	$charts['cpuSpeed']['heading'] = "CPU Speed (GHz)";
-	$charts['cpuSpeed']['query'] = "select trim(trailing '0' from round(convert (report_value, unsigned integer),-1)/1000) speed, count(*) c from reportRecord where report_key = 'cpuFreqMHz' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by speed order by speed";
+	$charts['cpuSpeed']['query'] = "select trim(trailing '0' from round(convert (report_value, unsigned integer),-1)/1000) speed, count(*) c from reportRecord where report_key = 'cpuFreqMHz' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by speed order by speed";
 
 	// CPU Count
 	$charts['cpuCount']['heading'] = "CPU Count";
-	$charts['cpuCount']['query'] = "select convert(report_value,unsigned integer) p, count(*) c from reportRecord where report_key = 'ncpu' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by p;";
+	$charts['cpuCount']['query'] = "select convert(report_value,unsigned integer) p, count(*) c from reportRecord where report_key = 'ncpu' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by p;";
 
 	$charts['language']['heading'] = "Language";
-	$charts['language']['query'] = "select substring_index(report_value,'-',1) lang, count(*) c from reportRecord where report_key = 'lang' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by lang order by c desc;";
+	$charts['language']['query'] = "select substring_index(report_value,'-',1) lang, count(*) c from reportRecord where report_key = 'lang' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by lang order by c desc;";
 
 	$charts['model']['heading'] = "Model";
-	$charts['model']['query'] = "select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(report_value,',',''),'9',''),'8',''),'7',''),'6',''),'5',''),'4',''),'3',''),'2',''),'1',''),'0','') p, count(*) c from reportRecord where report_key = 'model' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by c desc;";
+	$charts['model']['query'] = "select replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(report_value,',',''),'9',''),'8',''),'7',''),'6',''),'5',''),'4',''),'3',''),'2',''),'1',''),'0','') p, count(*) c from reportRecord where report_key = 'model' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by c desc;";
 
 	$charts['ram']['heading'] = "RAM (GB)";
-	$charts['ram']['query'] = "select round(convert(report_value,unsigned integer)/1024,1) p, count(*) c from reportRecord where report_key = 'ramMB' and report_id >= $earliestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by p;";
+	$charts['ram']['query'] = "select round(convert(report_value,unsigned integer)/1024,1) p, count(*) c from reportRecord where report_key = 'ramMB' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by p;";
 
 	foreach ($distinctApps as $app) {
 		echo "<h2>$app</h2>";
