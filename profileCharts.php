@@ -132,7 +132,6 @@ function profileCharts() {
 	}
 }
 
-function drawChart($query,$app) {
 function drawChart($chartArray,$app) {
 	global $DbLink;
 	echo "<h3>" . $chartArray['heading'] . "</h3>";
