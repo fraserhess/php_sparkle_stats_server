@@ -1,5 +1,5 @@
 <?php
-if (array_key_exists('appName', $_GET) AND validUserAgent()) {
+if (validProfile() AND validUserAgent()) {
 	// connect to the database
 	if (TryOpenDB()) {
 		writeProfileToDB();
@@ -66,6 +66,14 @@ function returnAppcast() {
 	header("content-type: application/xhtml+xml");
 	$xml = simplexml_load_file($appcastURL);
 	echo $xml->asXML();
+}
+
+function validProfile() {
+	if (array_key_exists('appName', $_GET)) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
 }
 
 function validUserAgent() {
