@@ -1,5 +1,5 @@
 <?php
-if (array_key_exists('appName', $_GET)) {
+if (array_key_exists('appName', $_GET) AND validUserAgent()) {
 	// connect to the database
 	if (TryOpenDB()) {
 		writeProfileToDB();
@@ -67,4 +67,16 @@ function returnAppcast() {
 	$xml = simplexml_load_file($appcastURL);
 	echo $xml->asXML();
 }
+
+function validUserAgent() {
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+	$blockedAgents[] = "/^Bodega\//";
+	foreach ($blockedAgents as $agent) {
+		if (preg_match($agent,$ua) > 0) {
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
 ?>
