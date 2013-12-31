@@ -33,10 +33,27 @@ These variables tell the PHP script how to access your database:
 
 For each application, create a duplicate of profileInfo-appname.php. In that file set one more variable that tells the PHP script the location of your appcast file:
 
-    $appcastURL = "http://you.org/_sparkle/ayefoto-appcast.xml";
+    $appcastURL = "http://you.org/_sparkle/ifilm-appcast.xml";
 
 Then upload profileInfo-*appname*.php, profileInfo-common.php and profileDB.php to your web host.  The URL to profileInfo-*appname*.php should match the URL you entered in your app's Info.plist for the SUFeedURL key.
 
 That's it!  Your web server is now ready to accept Sparkle requests with profile reports.
 
-If you like, you can also load the files profileLookup.php, profileCharts.php and style.css on your web server.  The first file is a simple script to look up profile reports from the last month and display them in an HTML table. The second displays charts of the same information.
+### Table and Charts
+
+You can also load the files profileLookup.php, profileCharts.php and style.css on your web server.  The first file looks up profile reports from the last month and displays them in an HTML table. The second displays charts of the same information.
+
+### Status Board
+
+The statusBoard.php script provides JSON data for charts in [Panic's Status Board](http://panic.com/statusboard/) app. Calling the script with no query string returns data showing the distribution of major OS versions across all profiles from all apps in the last month.
+
+The following query string fields can manipulate the output of the script:  
+*chart* takes either **os** or **appver**. Default: os. Example: chart=appver  
+*app* limits the query to a single application. Default: All applications. Example: app=iFilm. Field is required when chart=appver  
+*days* changes the number of days of data used. Default: 1 month. Example: days=14  
+*color* changes the color used in the chart. Valid options are: yellow, green, red, purple, blue, mediumGray, pink, aqua, orange, or lightGray. Default: blue. Example: color=red
+
+**Examples**
+
+    http://you.org/_sparkle/statusBoard.php?app=iFilm&days=14&color=pink  
+    http://you.org/_sparkle/statusBoard.php?chart=appver&app=iFilm
