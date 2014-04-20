@@ -135,7 +135,7 @@ function profileCharts() {
 	$charts['ram']['query'] = "select round(convert(report_value,unsigned integer)/1024,1) p, count(*) c from reportRecord where report_key = 'ramMB' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by p order by p;";
 
 	foreach ($distinctApps as $app) {
-		echo "<h2>$app</h2>";
+		echo "<h2 id=\"$app\">$app</h2>";
 		foreach ($charts as $chart) {
 			drawChart($chart,$app);
 		}
