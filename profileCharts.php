@@ -100,7 +100,7 @@ function profileCharts() {
 	$distinctAppsLookup->free();
 	
 	// App version
-	$charts['appVer']['heading'] = "App Versions";
+	$charts['appVer']['heading'] = "App Version";
 	$charts['appVer']['query'] = "select convert(report_value, unsigned integer) ver, count(*) c from reportRecord where report_key = 'appVersion' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by report_value order by ver";
 
 	$charts['os']['heading'] = "OS Version";
