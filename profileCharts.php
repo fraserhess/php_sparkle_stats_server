@@ -161,7 +161,8 @@ function drawChart($chartArray,$app) {
 		echo "<td class=\"chart-table-td\">\n";
 		echo "<div class=\"chart-table-column\">\n";
 		echo "<span style=\"width: 50px; height: " . $bar[1]/$greatest*150 . "px; border: 1px solid black; background-color: rgb(220,238,238); display: block; margin-left:auto;margin-right:auto;\">&nbsp;</span>\n";
-		echo "<strong>" . $bar[0] . "</strong><br>" . round($bar[1]/$count*100,2) . "%</div>\n";
+		$label = $bar[0];
+		echo "<strong>" . $label . "</strong><br>" . round($bar[1]/$count*100,2) . "%</div>\n";
 		echo "</td>\n";
 	}
 	echo "</tr></table>\n";
