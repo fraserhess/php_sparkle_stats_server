@@ -144,7 +144,6 @@ function profileCharts() {
 
 function drawChart($chartArray,$app) {
 	global $DbLink;
-	echo "<h3>" . $chartArray['heading'] . "</h3>";
 	$count = 0;
 	$greatest = 0;
 	$stmt = $DbLink->prepare($chartArray['query']);
@@ -156,6 +155,10 @@ function drawChart($chartArray,$app) {
 		$count +=$row[1];
 		if ($row[1] > $greatest) $greatest = $row[1];
 	}
+	if ($count == 0) {
+		return;
+	}
+	echo "<h3>" . $chartArray['heading'] . "</h3>";
 	echo "<table class=\"chart-table\"><tr class=\"chart-table-tr\">\n";
 	foreach ($resultsArray as $bar) {
 		echo "<td class=\"chart-table-td\">\n";
