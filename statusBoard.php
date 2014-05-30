@@ -110,7 +110,8 @@ $output["graph"]["datasequences"][0]["color"] = $color;
 
 $i = 0;
 foreach ($resultsArray as $bar) {
-	$output["graph"]["datasequences"][0]["datapoints"][$i]["title"] = (string) $bar[0];
+	$label = (string) $bar[0];
+	$output["graph"]["datasequences"][0]["datapoints"][$i]["title"] = $label;
 	$output["graph"]["datasequences"][0]["datapoints"][$i]["value"] = round($bar[1]/$count*100,2);
 	$i++;
 }
