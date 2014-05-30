@@ -78,7 +78,7 @@ if ($chart == "os") {
 		$output["graph"]["datasequences"][0]["title"] = "All apps";
 	}
 
-	$query = "select (case when substr(report_value,1,5) = '10.9.' then 'Mavericks' when substr(report_value,1,5) = '10.8.' then 'Mountain Lion' when substr(report_value,1,5) = '10.7.' then 'Lion' when substr(report_value,1,5) = '10.6.' then 'Snow Leopard' when substr(report_value,1,5) = '10.5.' then 'Leopard' else 'Other' end) p, count(*) c from reportRecord where report_key = 'osVersion' and report_id between $earliestReportID and $latestReportID " . $appsubquery . " group by p order by c desc;";
+	$query = "select (case when substr(report_value,1,5) = '10.9.' then 'Mavericks' when substr(report_value,1,5) = '10.8.' then 'Mountain Lion' when substr(report_value,1,5) = '10.7.' then 'Lion' when substr(report_value,1,5) = '10.6.' then 'Snow Leopard' when substr(report_value,1,5) = '10.5.' then 'Leopard' when substr(report_value,1,5) = '10.4.' then 'Tiger' when substr(report_value,1,5) = '10.3.' then 'Panther' else 'Other' end) p, count(*) c from reportRecord where report_key = 'osVersion' and report_id between $earliestReportID and $latestReportID " . $appsubquery . " group by p order by c desc;";
 	$output["graph"]["title"] = "OS Major Version";
 }
 
