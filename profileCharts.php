@@ -119,7 +119,7 @@ function profileCharts() {
 
 	// CPU speed
 	$charts['cpuSpeed']['heading'] = "CPU Speed (GHz)";
-	$charts['cpuSpeed']['query'] = "select trim(trailing '0' from round(convert (report_value, unsigned integer),-1)/1000) speed, count(*) c from reportRecord where report_key = 'cpuFreqMHz' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by speed order by speed";
+	$charts['cpuSpeed']['query'] = "select trim(trailing '.' from trim(trailing '0' from round(convert (report_value, unsigned integer),-1)/1000)) speed, count(*) c from reportRecord where report_key = 'cpuFreqMHz' and report_id between $earliestReportID and $latestReportID and report_id in (select report_id from reportRecord where report_key = 'appName' and report_value=?) group by speed order by speed";
 
 	// CPU Count
 	$charts['cpuCount']['heading'] = "CPU Count";
