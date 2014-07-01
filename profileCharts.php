@@ -1,6 +1,13 @@
 <html>
 <head>
-<title>Sparkle Profile Charts</title>
+<?php
+if (isset($_GET['app'])) {
+	$title = "Sparkle Profile Charts - " . $_GET['app'];
+} else {
+	$title = "Sparkle Profile Charts - All apps";
+}
+echo "<title>$title</title>";
+?>
 <link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
@@ -88,16 +95,21 @@ function profileCharts() {
 	$latestReportID = $row['report_id'];
 
 	// Get applications
-	$queryString = "select distinct report_value from reportRecord where report_key = 'appName' and report_id between $earliestReportID and $latestReportID order by report_value";
-	$distinctAppsLookup = $DbLink->query($queryString);
-	if (!$distinctAppsLookup) {
-		$DbError = $DbLink->error;
-		abortAndExit();
+	if (isset($_GET['app'])) {
+		$distinctApps[] = $_GET['app'];
+	} else {
+		// All apps
+		$queryString = "select distinct report_value from reportRecord where report_key = 'appName' and report_id between $earliestReportID and $latestReportID order by report_value";
+		$distinctAppsLookup = $DbLink->query($queryString);
+		if (!$distinctAppsLookup) {
+			$DbError = $DbLink->error;
+			abortAndExit();
+		}
+		while ($row = $distinctAppsLookup->fetch_array()) {
+			$distinctApps[] = $row[0];
+		}
+		$distinctAppsLookup->free();
 	}
-	while ($row = $distinctAppsLookup->fetch_array()) {
-		$distinctApps[] = $row[0];
-	}
-	$distinctAppsLookup->free();
 	
 	// App version
 	$charts['appVer']['heading'] = "App Version";
