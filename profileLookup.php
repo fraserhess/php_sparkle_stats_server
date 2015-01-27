@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>Sparkle Profile Data Lookup</title>
 <link rel="stylesheet" type="text/css" href="style.css">
+<meta charset="UTF-8">
 </head>
 <body>
 <?php
