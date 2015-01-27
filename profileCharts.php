@@ -12,7 +12,7 @@ echo "<title>$title</title>";
 
 </head>
 <body>
-<script>
+<script type="text/javascript">
 window.onload=function(){var e=document.getElementsByClassName("chart-table");var t=e.length;for(var n=0;n<t;n++){var r=e[n];var i=r.rows[0];var s=1;for(var o=0;o<i.cells.length;o++){var u=i.cells[o].offsetWidth;if(u>s){s=u}}for(var o=0;o<i.cells.length;o++){i.cells[o].style.width=s+"px"}}}
 </script>
 <?php
