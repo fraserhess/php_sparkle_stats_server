@@ -102,4 +102,5 @@ div.chart-table-column
 	position: relative;
 	overflow: hidden;
 	white-space: nowrap;
+	line-height: 1.2em;
 }
